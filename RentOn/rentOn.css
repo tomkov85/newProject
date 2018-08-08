@@ -1,0 +1,40 @@
+.advTable{
+	border: 2px solid black;
+	border-radius:5px;
+}
+
+.tableList{
+	list-style:none;
+	padding:0px;
+}
+
+.advTableListElement {
+	border-bottom:2px solid black;; 
+}
+
+.footerLinks {
+	margin-left:20px;
+	text-decoration: underline;
+}
+
+.noneStyle {
+	list-style:none;
+	font-size: 10px;
+}
+
+.navbar-inverse {
+	background-color:navy;
+}
+
+main {
+	margin:20px;
+	width:100%;
+	display:block;
+}
+
+
+
+#loginMessage {
+	margin:20px;
+	float:left;
+}
