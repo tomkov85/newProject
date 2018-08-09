@@ -31,10 +31,41 @@ main {
 	width:100%;
 	display:block;
 }
+.signedData{
+	margin:0px;
+	padding:0px;
+	background-color:red;
+	border: 1px solid white;
+	border-radius:4px;
+}
 
+.leftsideMenu {
+	margin:0px;
+	padding:10px;
+	border:2px solid black;
+	width:10%;
+	height:80%;
+	float:left;
+}
 
+aside {
+	margin:0px;
+	padding:10px;
+	border:2px solid black;
+	width:20%;
+	height:80%;
+	float:left;
+}
 
 #loginMessage {
 	margin:20px;
 	float:left;
+}
+
+.messageMain{
+	float:right;
+	width:80%;
+	height:80%;
+	padding:10px;
+	border:2px solid black;
 }

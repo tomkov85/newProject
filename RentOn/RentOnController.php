@@ -5,6 +5,7 @@
 		private $user = "root";
 		private $password = "";
 		private $connection;
+		private $pager = 2;
 		
 		public function __construct() {
 		try {
@@ -90,7 +91,16 @@
 			</table>
 			</div>
 			<br>
-		<?php } ?>	
+		<?php }
+			if(count($table) > $this->pager) {
+				$pagemax = ((count($table) - count($table) % $this->pager) / $this->pager);
+			}
+		?>
+		<ul class="pagination">
+			<?php for($i = 1; $i <= $pagemax; $i++) {?>
+			<li><a href="#"><?php echo $i ?></a></li>
+			<?php } ?>
+		</ul>
 	</main>
 	 <?php
 	}
@@ -145,6 +155,16 @@
 		$table = $this->getTableData(substr($sql,0,strlen($sql)-3));
 		$this->getAdvs($table);
 	}
+	
+	public function setNewMessage($sender,$adress,$title,$text) {
+		$this->connection->query("INSERT INTO renton.messages VALUES (null, '$sender', '$adress',  '$title', '$text',1, now())");
+	}
+	
+	public function getMessage($view) {
+			$this->connection->query("UPDATE renton.message SET new = false");
+			return $this->getRowData("SELECT * FROM renton.messages WHERE id = $view");
+	}
+	
 	}
 	$qo = new ServerConnection();
 	

@@ -36,6 +36,7 @@
 		<ul class="nav navbar-nav navbar-right">
 			<?php 
 				if(!empty($userName)){
+					$newMessageCounter = $qo->getSingleData("SELECT (count(id))newMessageCounter FROM renton.messages WHERE reciever = '$userName' and new = true");
 					?>
 					<li>
 					<div class="dropdown">
@@ -43,6 +44,7 @@
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu">
 							<li><a href = "RentOnMyAdv.php">My Advertisements</a>
+							<li><a href = "RentOnMessages.php">Messages<a class = "signedData"><?php echo $newMessageCounter?></a></a>
 							<li><a href = "RentOnUserRegistration.php">Data modification</a>
 							<li><a href = "RentOnExit.php">Logout</a>
 						</ul>

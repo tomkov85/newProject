@@ -18,13 +18,13 @@
 					<tr><td class = "advTable"><img src = "appartmentspics\house.jpg"/></td>
 						<td class = "advTable"><ul class = "tableList" style = "list-style:none; padding:0px">
 								<?php if($row->rentOrSell) {
-									echo "<li> Rent </li>";
+									echo "<li class = 'advTableListElement'> Rent </li>";
 								} else {
-									echo "<li> Sell </li>";
+									echo "<li class = 'advTableListElement'> Sell </li>";
 								} ?>
-								<li class = "advTable">City: <?php echo $row->city?><li>
-								<li class = "advTable">Size: <?php echo $row->size?> m2<li>
-								<li class = "advTable"><h4>Prize: <?php echo $row->prize?> Ft</h4><li>
+								<li class = "advTableListElement">City: <?php echo $row->city?><li>
+								<li class = "advTableListElement">Size: <?php echo $row->size?> m2<li>
+								<li class = "advTableListElement"><h4>Prize: <?php echo $row->prize?> Ft</h4><li>
 							</ul>
 						</td></tr>
 				</tbody>
