@@ -34,3 +34,7 @@
 			<br>
 		<?php } ?>	
 	</main>
+	<?php
+		require_once 'RentOnFooterView.html';
+	?>
+	

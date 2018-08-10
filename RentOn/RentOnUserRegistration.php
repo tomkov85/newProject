@@ -61,6 +61,7 @@
 </main>
 
 <?php
+
 	if(isset($_POST['submit'])){
 	if(!empty($_POST['name']) & !empty($_POST['adress']) & !empty($_POST['email']) & !empty($_POST['pwd1']) & !empty($_POST['pwd2'])) {
 		$name = $_POST['name'];
@@ -94,4 +95,5 @@
 		<?php
 	}
 	}
+	require_once 'RentOnFooterView.html';
 ?>

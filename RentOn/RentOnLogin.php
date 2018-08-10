@@ -45,4 +45,5 @@
 		<?php
 	}
 	}
+	require_once 'RentOnFooterView.html';
 ?>

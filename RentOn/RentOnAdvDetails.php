@@ -4,4 +4,5 @@
 
 	$qo->getAdv($_GET['number']);
 	
+	require_once 'RentOnFooterView.html';
 ?>

@@ -28,6 +28,7 @@
 
 main {
 	margin:20px;
+	margin-bottom:0px;
 	width:100%;
 	display:block;
 }
@@ -68,4 +69,10 @@ aside {
 	height:80%;
 	padding:10px;
 	border:2px solid black;
+}
+
+footer {
+	width:100%;
+	text-align:center;
+	height:30px;
 }

@@ -91,20 +91,10 @@
 			</table>
 			</div>
 			<br>
-		<?php }
-			if(count($table) > $this->pager) {
-				$pagemax = ((count($table) - count($table) % $this->pager) / $this->pager);
-			}
-		?>
-		<ul class="pagination">
-			<?php for($i = 1; $i <= $pagemax; $i++) {?>
-			<li><a href="#"><?php echo $i ?></a></li>
-			<?php } ?>
-		</ul>
+		<?php } ?>
 	</main>
 	 <?php
 	}
-	
 	public function getAdv($id) {
 		$row = $this->getRowData("SELECT * FROM renton.advertisements WHERE id = '$id' ORDER BY beginDate DESC");
 	?>
@@ -135,9 +125,7 @@
 	 <?php
 	}
 	
-	public function detailedSearch($prizeMin, $prizeMax, $sizeMin, $sizeMax) {
-		$sql = "SELECT * FROM renton.advertisements WHERE";
-		
+	public function setDetailedSearchQuery($prizeMin, $prizeMax, $sizeMin, $sizeMax, $sql) {
 		if($prizeMax != null) {
 			if($prizeMin != null) {
 				$prizeMin = 0;
@@ -152,8 +140,7 @@
 			$sql = $sql."(size BETWEEN '$sizeMin' AND '$sizeMax') AND";
 		}
 		
-		$table = $this->getTableData(substr($sql,0,strlen($sql)-3));
-		$this->getAdvs($table);
+		return substr($sql,0,strlen($sql)-3);
 	}
 	
 	public function setNewMessage($sender,$adress,$title,$text) {
