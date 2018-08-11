@@ -32,8 +32,8 @@
 		$email = $_POST['email'];
 		$pwd = $_POST['pwd'];
 		unset($_POST['submit']);
-		if($qo->checkPwd($email, $pwd)) {
-			$qo->login($email);
+		if($controllerObj->checkPwd($email, $pwd)) {
+			$controllerObj->login($email);
 		} else {
 			?>
 			<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> Your email adress or password doesnt match! </div></div>
@@ -45,5 +45,7 @@
 		<?php
 	}
 	}
-	require_once 'RentOnFooterView.html';
 ?>
+<script src="bootstrap.js"></script>
+</body>
+</html>

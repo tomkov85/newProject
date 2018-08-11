@@ -2,8 +2,8 @@
 
 	require_once "RentOnMainView.php";
 	$userEmail = $_SESSION['loginName'];
-	$userId = $qo->getSingleData("SELECT id FROM renton.users WHERE email = '$userEmail'");
-	$table = $qo->getTableData("SELECT * FROM renton.advertisements WHERE advUser = $userId ORDER BY beginDate DESC");
+	$userId = $controllerObj->getUserData($userEmail)->id;
+	$table = $controllerObj->getUserAdvs($userId);
 	?>
 	<main>
 		<button onclick = "location.href = 'RentOnManageAdv.php?id=0'" class="btn btn-primary" >New Advertisement</button><br><br>
@@ -11,17 +11,19 @@
 		foreach($table as $row) {
 			$deleteId = $row->id * -1;
 			?>
-			<div >
-			<table>
+			<div>
+			<table class = "advTable">
 				<tbody>
-					<tr class = "advTable"><td><h3><?php echo $row->title?></h3></td><td></td></tr>
-					<tr><td class = "advTable"><img src = "appartmentspics\house.jpg"/></td>
-						<td class = "advTable"><ul class = "tableList" style = "list-style:none; padding:0px">
+					<tr class = "advTableCell"><td><h3><?php echo $row->title?></h3></td><td></td></tr>
+					<tr><td class = "advTableCell" id = "advImgCell"><img src = "appartmentspics\house.jpg"/></td>
+						<td class = "advTableCell"><ul class = "tableList">
+								<li class = "advTableListElement">
 								<?php if($row->rentOrSell) {
-									echo "<li class = 'advTableListElement'> Rent </li>";
+									echo " Rent ";
 								} else {
-									echo "<li class = 'advTableListElement'> Sell </li>";
+									echo "Sell ";
 								} ?>
+								</li>
 								<li class = "advTableListElement">City: <?php echo $row->city?><li>
 								<li class = "advTableListElement">Size: <?php echo $row->size?> m2<li>
 								<li class = "advTableListElement"><h4>Prize: <?php echo $row->prize?> Ft</h4><li>

@@ -15,9 +15,9 @@
 		} else {
 			$sql."WHERE ";
 		}
-		$sql = $qo->setDetailedSearchQuery($_GET['prizeMinSearch'], $_GET['prizeMaxSearch'],$_GET['sizeMinSearch'],$_GET['sizeMaxSearch'],$sql);		
+		$sql = $controllerObj->setDetailedSearchQuery($_GET['prizeMinSearch'], $_GET['prizeMaxSearch'],$_GET['sizeMinSearch'],$_GET['sizeMaxSearch'],$sql);		
 	}
-	$tableAll = $qo->getTableData($sql);
+	$tableAll = $controllerObj->setSearchData($sql);
 	$sql = $sql." ORDER BY ";
 	
 	if(empty($_GET['order'])){
@@ -53,13 +53,13 @@
 					</select>
 		</form>
 	<?php
-	$table = $qo->getTableData($sql);
-	$qo->getAdvs($table);
+	$table = $controllerObj->setSearchData($sql);;
+	$controllerObj->getAdvs($table);
 
 	if(count($tableAll) > $pagemax) {
 				$pager = ((count($tableAll) - count($tableAll) % $pagemax) / $pagemax);
 				?>
-					<ul class="pagination">
+					<ul class="pagination" id = "searchPagination">
 					<?php for($i = 1; $i <= $pager; $i++) {?>
 					<li><a href="<?php echo $_SERVER['REQUEST_URI'].'&page='.$i?>"><?php echo $i ?></a></li>
 					<?php } ?>

@@ -11,10 +11,10 @@
 	$id = $_GET['id'];
 	
 	if($id < 0) {
-	  $qo->manageAdvertisements($id, null, null, null, null, null, null, null, null, null);
+	  $controllerObj->manageAdvertisements($id, null, null, null, null, null, null, null, null, null);
 	} else if($id > 0) {
 		
-		$row = $qo->getRowData("SELECT * FROM renton.advertisements WHERE id = $id");
+		$row = $controllerObj->getAdvData($id);
 		
 		$title = $row->title;
 		if($row->rentOrSell) {
@@ -82,7 +82,7 @@
     </div>
     <div class="form-group col-sm-8">
 	<div class="col-sm-offset-2 col-sm-5">
-    <button type="submit" class="btn btn-info" name = "submit">Submit</button>
+    <button type="submit" class="btn btn-primary" name = "submit">Submit</button>
 	</div>
 	</div>
 	</form>
@@ -93,13 +93,12 @@
 			if(!empty($_POST['title']) & !empty($_POST['type']) & !empty($_POST['city']) & !empty($_POST['size']) & !empty($_POST['prize']) & !empty($_POST['advText']) & !empty($_POST['heatingType'])) {
 				unset($_POST['submit']);				
 				$userEmail = $_SESSION['loginName'];
-				$userId = $qo->getSingleData("SELECT id FROM renton.users WHERE email = '$userEmail'");
-				$qo->manageAdvertisements($id,$_POST['title'],$_POST['type'],$_POST['city'],$_POST['size'],$_POST['heatingType'],$_POST['prize'],$_POST['advText'],$userId);
+				$userId = $controllerObj->getSingleData("SELECT id FROM renton.users WHERE email = '$userEmail'");
+				$controllerObj->manageAdvertisements($id,$_POST['title'],$_POST['type'],$_POST['city'],$_POST['size'],$_POST['heatingType'],$_POST['prize'],$_POST['advText'],$userId);
 			} else {?>
 		<div class="col-sm-offset-1 col-sm-5 "><div class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> You doesnt fill all the fields! </div></div>
 		<?php
 			
 		} 
 	}
-	require_once 'RentOnFooterView.html';	
 	?>

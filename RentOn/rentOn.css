@@ -1,4 +1,21 @@
-.advTable{
+
+main {
+	margin:20px;
+	margin-bottom:0px;
+	width:100%;
+	height:60%;
+	display:block;
+}
+
+.advTable {
+	width:30%;
+}
+
+#advImgCell {
+	width:50%;
+}
+
+.advTableCell{
 	border: 2px solid black;
 	border-radius:5px;
 }
@@ -17,24 +34,11 @@
 	text-decoration: underline;
 }
 
-.noneStyle {
-	list-style:none;
-	font-size: 10px;
-}
-
-.navbar-inverse {
-	background-color:navy;
-}
-
-main {
-	margin:20px;
-	margin-bottom:0px;
-	width:100%;
-	display:block;
-}
 .signedData{
-	margin:0px;
-	padding:0px;
+	margin-left:10px;
+	padding:1px;
+	padding-left:3px;
+	padding-right:3px;
 	background-color:red;
 	border: 1px solid white;
 	border-radius:4px;
@@ -44,16 +48,7 @@ main {
 	margin:0px;
 	padding:10px;
 	border:2px solid black;
-	width:10%;
-	height:80%;
-	float:left;
-}
-
-aside {
-	margin:0px;
-	padding:10px;
-	border:2px solid black;
-	width:20%;
+	width:12%;
 	height:80%;
 	float:left;
 }
@@ -63,16 +58,58 @@ aside {
 	float:left;
 }
 
+#searchField {
+	padding-top:8px;	
+}
+
+#detailedSearch{
+	width:100px;
+}
+
+#searchPagination {
+	margin-left:20px;
+}
+
 .messageMain{
 	float:right;
-	width:80%;
+	width:85%;
 	height:80%;
 	padding:10px;
+	margin-right:40px;
 	border:2px solid black;
+	height:50%;
+}
+
+#messageTableTitleCell {
+	width:45%;
+}
+
+#messageTableSendRecCell {
+	width:22%;
+}
+
+#messageTextBox {
+	width:100%;
+	height:50%;
+}
+
+#messageForm {
+	margin:10px;
 }
 
 footer {
 	width:100%;
 	text-align:center;
 	height:30px;
+}
+
+#footerNav {
+	width:100%;
+	text-align:center;
+	height:30px;
+}
+
+.noneStyle {
+	list-style:none;
+	font-size: 10px;
 }

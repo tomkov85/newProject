@@ -2,7 +2,7 @@
 
 	require_once "RentOnMainView.php";
 
-	$qo->getAdv($_GET['number']);
+	$controllerObj->getAdv($_GET['number']);
 	
 	require_once 'RentOnFooterView.html';
 ?>

@@ -1,8 +1,8 @@
 <?php 
 
 	require_once 'RentOnMainView.php';
-	$table = $qo->getTableData("SELECT * FROM renton.advertisements ORDER BY beginDate DESC limit 5");
-	$qo->getAdvs($table);
+	$table = $controllerObj->getLastAdvs();
+	$controllerObj->getAdvs($table);
 	
 	require_once 'RentOnFooterView.html';
 ?>

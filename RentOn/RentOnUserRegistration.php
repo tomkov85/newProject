@@ -7,7 +7,7 @@
 	$accountEmail = "";
 	if(!empty($_SESSION["loginName"])) {
 		$accountEmail = $_SESSION["loginName"];
-		$accountDatas = $qo->getRowData("SELECT * FROM renton.users WHERE email = '$accountEmail'");
+		$accountDatas = $controllerObj->getUserData($accountEmail);
 		$accountAdress = $accountDatas->adress;
 		$accountPhoneNumber = $accountDatas->phone;
 		$accountName = $accountDatas->name;
@@ -54,7 +54,7 @@
     </div>
     <div class="form-group col-sm-8">
 	<div class="col-sm-offset-2 col-sm-5">
-    <button type="submit" class="btn btn-info" name = "submit">Submit</button>
+    <button type="submit" class="btn btn-primary" name = "submit">Submit</button>
 	</div>
 	</div>
 	</form>
@@ -77,8 +77,8 @@
 		}
 		
 		if ($pwd1 == $pwd2) {
-		if($qo->checkPwd($email, $pwd1) != null) {
-			$qo->registNewUser($name, $adress, $phone, $email, $pwd1);
+		if($controllerObj->checkPwd($email, $pwd1) != null) {
+			$controllerObj->registNewUser($name, $adress, $phone, $email, $pwd1);
 		} else {
 			?>
 			<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> There is a registration for this email! </div></div>
@@ -95,5 +95,7 @@
 		<?php
 	}
 	}
-	require_once 'RentOnFooterView.html';
 ?>
+<script src="bootstrap.js"></script>
+</body>
+</html>
