@@ -5,7 +5,7 @@
 ?>
 
 <main>
-	<form class="form-horizontal" action="" method = "POST">
+	<form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']?>" method = "POST">
     <div class="form-group col-sm-7">
       <label class="control-label col-sm-2" for="email">Email:</label>
 	  <div class="col-sm-5">
@@ -20,7 +20,7 @@
     </div>
     <div class="form-group col-sm-7">
 	<div class="col-sm-offset-2 col-sm-5">
-    <button type="submit" class="btn btn-info" name = "submit">Submit</button>
+    <button type="submit" class="btn btn-primary" name = "submit">Submit</button>
 	</div>
 	</div>
 	</form>

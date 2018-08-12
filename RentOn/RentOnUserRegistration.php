@@ -2,20 +2,20 @@
 
 	require_once "RentOnMainView.php";
 	$accountName = "";
-	$accountAdress = "";
+	$accountAddress = "";
 	$accountPhoneNumber = "";
 	$accountEmail = "";
 	if(!empty($_SESSION["loginName"])) {
 		$accountEmail = $_SESSION["loginName"];
 		$accountDatas = $controllerObj->getUserData($accountEmail);
-		$accountAdress = $accountDatas->adress;
+		$accountAddress = $accountDatas->address;
 		$accountPhoneNumber = $accountDatas->phone;
 		$accountName = $accountDatas->name;
 	}
 ?>
 
 <main>
-	<form class="form-horizontal" action="" method = "POST">
+	<form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']?>" method = "POST">
 	<div class="form-group col-sm-8">
       <label class="control-label col-sm-2" for="name">Name:</label>
 	  <div class="col-sm-5">
@@ -23,15 +23,15 @@
 	  </div>
 	</div>
     <div class="form-group col-sm-8">
-      <label class="control-label col-sm-2" for="adress">Adress:</label>
+      <label class="control-label col-sm-2" for="address">Address:</label>
 	  <div class="col-sm-5">
-      <input type="text" class="form-control" name="adress" size = "20" value = "<?php echo $accountAdress; ?>" />
+      <input type="text" class="form-control" name="address" size = "20" value = "<?php echo $accountAddress; ?>" />
 	  </div>
 	</div>
 	<div class="form-group col-sm-8">
       <label class="control-label col-sm-2" for="phone">Phone number:</label>
 	  <div class="col-sm-5">
-      <input type="text" class="form-control" name="phoneNumber" size = "20" value = "<?php echo $accountPhoneNumber; ?>" />
+      <input type="tel" class="form-control" name="phoneNumber" size = "20" value = "<?php echo $accountPhoneNumber; ?>" />
 	  </div>
 	</div>
 	<div class="form-group col-sm-8">
@@ -63,9 +63,9 @@
 <?php
 
 	if(isset($_POST['submit'])){
-	if(!empty($_POST['name']) & !empty($_POST['adress']) & !empty($_POST['email']) & !empty($_POST['pwd1']) & !empty($_POST['pwd2'])) {
+	if(!empty($_POST['name']) & !empty($_POST['address']) & !empty($_POST['email']) & !empty($_POST['pwd1']) & !empty($_POST['pwd2'])) {
 		$name = $_POST['name'];
-		$adress = $_POST['adress'];
+		$address = $_POST['address'];
 		$email = $_POST['email'];
 		$pwd1 = $_POST['pwd1'];
 		$pwd2 = $_POST['pwd2'];
@@ -78,7 +78,7 @@
 		
 		if ($pwd1 == $pwd2) {
 		if($controllerObj->checkPwd($email, $pwd1) != null) {
-			$controllerObj->registNewUser($name, $adress, $phone, $email, $pwd1);
+			$controllerObj->registNewUser($name, $address, $phone, $email, $pwd1);
 		} else {
 			?>
 			<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> There is a registration for this email! </div></div>

@@ -23,8 +23,7 @@
 	
 	public function login($name) {
 		$_SESSION['loginName'] = $name;
-		header("location: " . $_SERVER['REQUEST_URI']);
-		exit();
+		header("location: RentOnMyAdv.php");
 	}
 
 	public function registNewUser($name, $adress, $phone, $email, $pwd) {
@@ -49,7 +48,7 @@
 		} else {
 			$this->rmObj->getConnection()->query("UPDATE renton.advertisements SET title = '$title', rentOrSell = '$type', city = '$city', size = $size, heatingType = '$heatingType', prize = $prize, advertisementText = '$advText' WHERE id = $id"); 
 		}
-		header('Location:RentOnMyAdv.php');
+		header('location:RentOnMyAdv.php');
 	}
 	
 	public function getAdvData($id) {
@@ -107,6 +106,7 @@
 								</li>
 								<li class = "advTableListElement">City: <?php echo $row->city?><li>
 								<li class = "advTableListElement">Size: <?php echo $row->size?> m2<li>
+								<li class = "advTableListElement">Heating System: <?php echo $row->heatingSystem?><li>
 								<li class = "advTableListElement"><h4>Prize: <?php echo $row->prize?> Ft</h4><li>
 							</ul>
 						</td></tr>
@@ -144,10 +144,11 @@
 	
 	public function setNewMessage($sender,$adress,$title,$text) {
 		$this->rmObj->getConnection()->query("INSERT INTO renton.messages VALUES (null, '$sender', '$adress',  '$title', '$text',1, now())");
+		header('location:RentOnMessages.php?view=sent');
 	}
 	
 	public function getMessage($view) {
-		$this->rmObj->getConnection()->query("UPDATE renton.message SET new = false");
+		$this->rmObj->getConnection()->query("UPDATE renton.messages SET new = 0 WHERE id = $view");
 		return $this->rmObj->getRowData("SELECT * FROM renton.messages WHERE id = $view");
 	}
 	
@@ -159,6 +160,10 @@
 	public function getMessageCounter($sql) {
 		$actualSql = "SELECT (count(id))newMessageCounter FROM renton.messages WHERE ".$sql;
 		return $this->rmObj->getSingleData($actualSql);
+	}
+	
+	public function deleteMessage($view) {
+		$this->rmObj->getConnection()->query("DELETE FROM renton.messages WHERE id = $view");
 	}
 	}
 ?>

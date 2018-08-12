@@ -3,11 +3,11 @@
 	require_once 'RentOnMainView.php';
 	$userName = $_SESSION['loginName'];
 	$newMessageCounter = $controllerObj->getMessageCounter("reciever = '$userName' and new = true");
-	$recievedMessageCounter = $controllerObj->getMessageCounter("reciever = '$userName'");
+	$incomingMessageCounter = $controllerObj->getMessageCounter("reciever = '$userName'");
 	$sentMessageCounter = $controllerObj->getMessageCounter("sender = '$userName'");
 	$view = $_GET["view"];
-	
-		if($view == "recieved") {
+	$mrOrw = true;
+		if($view == "incoming") {
 		$table = $controllerObj->getMessages("reciever = '$userName'");		
 		} else if($view == "sent")  {
 			$table = $controllerObj->getMessages("sender = '$userName'");
@@ -29,12 +29,12 @@
 <button onclick = "location.href = 'RentOnMessages.php?view=new'" class="btn btn-primary" >New Message</button><br><br>
 <aside class = "leftsideMenu">
 	<ul class = "tableList">
-		<li><a href = "RentOnMessages.php?view=recieved">recieved <?php echo $recievedMessageCounter, " ,New<span class = 'signedData'><b>$newMessageCounter</b></span>";?></a></li>
+		<li><a href = "RentOnMessages.php?view=incoming">incoming <?php echo $incomingMessageCounter, " ,New<span class = 'signedData'><b>$newMessageCounter</b></span>";?></a></li>
 		<li><a href = "RentOnMessages.php?view=sent">sent <?php echo $sentMessageCounter?></a></li>
 	</ul>	
 </aside>	
 <div class = "messageMain">	
-	<?php 	if($view == "recieved" | $view == "sent") { ?>
+	<?php 	if($view == "incoming" | $view == "sent") { ?>
 			<table style ="width:100%">
 		    <thead><th>sender</th><th>reciever</th><th>title</th><th>Date</th></thead>
 			<tbody>
@@ -46,10 +46,10 @@
 			
 	<?php } else {
 		?>
-		<form class = "form-horizontal" action = "RentOnMessages.php?view=new" method = "POST" id = "messageForm">
+		<form class = "form-horizontal" action = "RentOnMessages.php?view=sent" method = "POST" id = "messageForm">
 				<div class = "form-group">
 					<label>Adress:</label>
-					<input type = "text" class = "form-control" name = "newMessageAdress" value = '<?php echo $adress ?>' <?php if($view != "new"){echo  " readonly ";}?> />
+					<input type = "email" class = "form-control" name = "newMessageAdress" value = '<?php echo $adress ?>' <?php if($view != "new"){echo  " readonly ";}?> />
 				</div>
 				<div class = "form-group">
 					<label>Title:</label>
@@ -59,22 +59,33 @@
 					<label>Text:</label>
 					<textarea name = "newMessageText" <?php if($view != "new"){echo  " readonly ";}?> id = "messageTextBox"><?php echo $text?></textarea>				
 				</div>
-				<?php if($view == "new") { ?>
+				<?php if($view == "new") { 
+					$mrOrw = true;
+					?>
 					<button type = "submit" class = "btn btn-primary" name = "newMessageSubmit">Send</button>
 				
-				<?php } ?>				
+				<?php } else { 
+					$mrOrw = false;
+					?>
+					<button type = "submit" class = "btn btn-primary" name = "deleteMessageSubmit">Delete</button>
+				<?php } ?>			
 		</form></div>
 </main>
 	<?php }
-	
-	if($_POST) {
+	if($mrOrw) {
+	if(isset($_POST['newMessageSubmit'])) {
+		unset($_POST['newMessageSubmit']);
 		if(!empty($_POST["newMessageAdress"])) {
 			$controllerObj->setNewMessage($userName,$_POST["newMessageAdress"], $_POST["newMessageTitle"],$_POST["newMessageText"]);
 		} else {
 			?>
 			<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> You didnt give any email adress! </div></div>
 		<?php
-		}		
+		}
+	}
+	} else if (isset($_POST['deleteMessageSubmit'])) {
+		unset($_POST['deleteMessageSubmit']);
+		$controllerObj->deleteMessage($view);
 	}
 	?>
 <script src="bootstrap.js"></script>

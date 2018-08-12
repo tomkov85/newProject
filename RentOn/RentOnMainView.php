@@ -27,7 +27,7 @@
 		</div>
 		
 		<div class="form-group" id = "searchField">
-			<input type="text" name = "searchField" class="form-control" size = "30" placeholder="Where do you search house?">
+			<input type="search" name = "searchField" class="form-control" size = "30" placeholder="Where do you search house?">
 			<button class="btn btn-primary" type="submit">Search</button>
 			<a data-toggle = "collapse" data-target = "#search">more options</a>
 		</div>						 
@@ -42,7 +42,7 @@
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu">
 							<li><a href = "RentOnMyAdv.php">My Advertisements</a></li>
-							<li><a href = "RentOnMessages.php?view=recieved">Messages <span class = "signedData"><b><?php echo $newMessageCounter?></b></span></a></li>
+							<li><a href = "RentOnMessages.php?view=incoming">Messages <span class = "signedData"><b><?php echo $newMessageCounter?></b></span></a></li>
 							<li><a href = "RentOnUserRegistration.php">Data modification</a></li>
 							<li><a href = "RentOnExit.php">Logout</a></li>
 						</ul>

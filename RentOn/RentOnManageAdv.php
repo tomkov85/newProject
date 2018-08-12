@@ -5,7 +5,7 @@
 	$type = "";
 	$city = "";
 	$size = "";
-	$heatingType = "";
+	$heatingSystem = "";
 	$prize = "";
 	$advText = "";
 	$id = $_GET['id'];
@@ -24,13 +24,13 @@
 		}		
 		$city = $row->city;
 		$size = $row->size;
-		$heatingType = $row->heatingType;
+		$heatingSystem = $row->heatingSystem;
 		$prize = $row->prize;
 		$advText = $row->advertisementText;
 	}
 	?>
 	<main>
-	<form class="form-horizontal" action="" method = "POST">
+	<form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']?>" method = "POST">
 	<div class="form-group col-sm-8">
       <label class="control-label col-sm-2" for="title">Title:</label>
 	  <div class="col-sm-5">
@@ -59,9 +59,9 @@
 	  </div>
 	</div>
 	<div class="form-group col-sm-8">
-      <label class="control-label col-sm-2" for="heatingType">Heating type:</label>
+      <label class="control-label col-sm-2" for="heatingSystem">Heating System:</label>
 	  <div class="col-sm-5">
-	  <select name = "heatingType">
+	  <select name = "heatingSystem">
 		<option value = "gas">gas</option>
 		<option value = "electric">electric</option>
 		<option value = "wood">wood</option>
@@ -75,7 +75,7 @@
 	  </div>
 	</div>
 	<div class="form-group col-sm-8">
-      <label class="control-label col-sm-2" for="pwd">Adveritsemnet Text:</label>
+      <label class="control-label col-sm-2" for="pwd">Adveritsement Text:</label>
 	  <div class="col-sm-5">
       <textarea name = "advText" class="col-sm-12"> <?php echo $advText; ?></textarea>
 	  </div>
@@ -90,11 +90,11 @@
 	
 	<?php
 		if(isset($_POST['submit'])) {
-			if(!empty($_POST['title']) & !empty($_POST['type']) & !empty($_POST['city']) & !empty($_POST['size']) & !empty($_POST['prize']) & !empty($_POST['advText']) & !empty($_POST['heatingType'])) {
+			if(!empty($_POST['title']) & !empty($_POST['type']) & !empty($_POST['city']) & !empty($_POST['size']) & !empty($_POST['prize']) & !empty($_POST['advText']) & !empty($_POST['heatingSystem'])) {
 				unset($_POST['submit']);				
 				$userEmail = $_SESSION['loginName'];
-				$userId = $controllerObj->getSingleData("SELECT id FROM renton.users WHERE email = '$userEmail'");
-				$controllerObj->manageAdvertisements($id,$_POST['title'],$_POST['type'],$_POST['city'],$_POST['size'],$_POST['heatingType'],$_POST['prize'],$_POST['advText'],$userId);
+				$userId = $controllerObj->getUserData($userEmail)->id;
+				$controllerObj->manageAdvertisements($id,$_POST['title'],$_POST['type'],$_POST['city'],$_POST['size'],$_POST['heatingSystem'],$_POST['prize'],$_POST['advText'],$userId);
 			} else {?>
 		<div class="col-sm-offset-1 col-sm-5 "><div class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> You doesnt fill all the fields! </div></div>
 		<?php
@@ -102,3 +102,7 @@
 		} 
 	}
 	?>
+	
+<script src="bootstrap.js"></script>
+</body>
+</html>
