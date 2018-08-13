@@ -95,7 +95,5 @@
 		<?php
 	}
 	}
+	require_once 'RentOnFooterView.html';
 ?>
-<script src="bootstrap.js"></script>
-</body>
-</html>

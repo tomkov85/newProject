@@ -31,7 +31,7 @@
 						</td></tr>
 				</tbody>
 			</table>
-			<a href = 'RentOnManageAdv.php?id=<?php echo $row->id?>'>Modification</a>   <a href = 'RentOnManageAdv.php?id=<?php echo $deleteId?>'>Delete</a>
+			<a href = 'RentOnManageAdv.php?id=<?php echo $row->id?>'>Modification</a><a href = 'RentOnManageAdv.php?id=<?php echo $deleteId?>' id = "myAdvDeleteLink">Delete</a>
 			</div>
 			<br>
 		<?php } ?>	

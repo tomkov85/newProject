@@ -101,8 +101,5 @@
 			
 		} 
 	}
-	?>
-	
-<script src="bootstrap.js"></script>
-</body>
-</html>
+	require_once 'RentOnFooterView.html';
+?>

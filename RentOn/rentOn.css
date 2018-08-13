@@ -3,8 +3,16 @@ main {
 	margin:20px;
 	margin-bottom:0px;
 	width:100%;
-	height:60%;
 	display:block;
+	min-height:480px;
+}
+
+#formSize {
+	width:100px;
+}
+
+#size-form-group {
+	margin-left: 40px;
 }
 
 .advTable {
@@ -35,7 +43,6 @@ main {
 }
 
 .signedData{
-	margin-left:10px;
 	padding:1px;
 	padding-left:3px;
 	padding-right:3px;
@@ -44,11 +51,20 @@ main {
 	border-radius:4px;
 }
 
+#myAdvDeleteLink {
+	margin-left:2%;
+	overflow:none;
+}
+
+#advListSettingsMenu {
+	margin-left:20px;
+}
+
 .leftsideMenu {
 	margin:0px;
 	padding:10px;
 	border:2px solid black;
-	width:12%;
+	width:15%;
 	height:80%;
 	float:left;
 }
@@ -62,22 +78,17 @@ main {
 	padding-top:8px;	
 }
 
-#detailedSearch{
-	width:100px;
-}
-
 #searchPagination {
 	margin-left:20px;
 }
 
 .messageMain{
 	float:right;
-	width:85%;
+	width:82%;
 	height:80%;
 	padding:10px;
-	margin-right:40px;
+	margin-right:3%;
 	border:2px solid black;
-	height:50%;
 }
 
 #messageTableTitleCell {
@@ -97,16 +108,14 @@ main {
 	margin:10px;
 }
 
-footer {
-	width:100%;
-	text-align:center;
-	height:30px;
+.newMessageBG {
+	background-color:pink;
 }
 
 #footerNav {
 	width:100%;
 	text-align:center;
-	height:30px;
+	height:auto;
 }
 
 .noneStyle {

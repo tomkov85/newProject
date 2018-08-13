@@ -27,8 +27,8 @@
 		</div>
 		
 		<div class="form-group" id = "searchField">
-			<input type="search" name = "searchField" class="form-control" size = "30" placeholder="Where do you search house?">
-			<button class="btn btn-primary" type="submit">Search</button>
+			<input type="search" name = "searchField" class="form-control" size = "30" placeholder="Where do you search an apartment?">
+			<button class="btn btn-primary" type="submit"><img src = "icons/glyphicons-28-search.png"> Search</button>
 			<a data-toggle = "collapse" data-target = "#search">more options</a>
 		</div>						 
 		<ul class="nav navbar-nav navbar-right">
@@ -42,7 +42,7 @@
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu">
 							<li><a href = "RentOnMyAdv.php">My Advertisements</a></li>
-							<li><a href = "RentOnMessages.php?view=incoming">Messages <span class = "signedData"><b><?php echo $newMessageCounter?></b></span></a></li>
+							<li><a href = "RentOnMessages.php?view=incoming">Messages <img src = "icons/glyphicons-130-message-new.png"><span class = "signedData"><b><?php echo $newMessageCounter?></b></span></a></li>
 							<li><a href = "RentOnUserRegistration.php">Data modification</a></li>
 							<li><a href = "RentOnExit.php">Logout</a></li>
 						</ul>
@@ -63,14 +63,14 @@
 			<div class = "form-group">
 			<label for = "prize">Prize</label>
 			<input class = "form-control" type = "number" name = "prizeMinSearch" placeholder = "min"/>
-			-
-			<input class = "form-control" type = "number" name = "prizeMaxSearch" placeholder = "max"/>
+			 Ft -
+			<input class = "form-control" type = "number" name = "prizeMaxSearch" placeholder = "max"/> Ft  
 			</div>
-			<div class = "form-group">
+			<div class = "form-group" id = "size-form-group">
 			<label for = "size">Size</label>
-			<input class = "form-control" type = "number" name = "sizeMinSearch" placeholder = "min" id = "deatiledSearch"/>
-			-
-			<input class = "form-control" type = "number" name = "sizeMaxSearch" placeholder = "max" id = "deatiledSearch"/>
+			<input class = "form-control" type = "number" name = "sizeMinSearch" placeholder = "min" id = "formSize"/>
+			 m2 -
+			<input class = "form-control" type = "number" name = "sizeMaxSearch" placeholder = "max" id = "formSize"/> m2
 			</div>
 		</form>
 		</div>

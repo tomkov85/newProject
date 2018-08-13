@@ -60,25 +60,9 @@
 	<main>
 		<?php 
 		foreach($table as $row) {
+			$this->startAdvTable($row);
 			?>
-			<div>
-			<table class = "advTable">
-				<tbody>
-					<tr class = "advTableCell"><td><h3><?php echo $row->title?></h3></td><td></td></tr>
-					<tr><td class = "advTableCell" id = "advImgCell"><img src = "appartmentspics\house.jpg"/></td>
-						<td class = "advTableCell"><ul class = "tableList">
-								<li class = "advTableListElement">
-								<?php if($row->rentOrSell) {
-									echo " Rent ";
-								} else {
-									echo "Sell ";
-								} ?>
-								</li>
-								<li class = "advTableListElement">City: <?php echo $row->city?><li>
-								<li class = "advTableListElement">Size: <?php echo $row->size?> m2<li>
-								<li class = "advTableListElement"><h4>Prize: <?php echo $row->prize?> Ft</h4><li>
-							</ul>
-						</td></tr>
+				
 						<tr><td><a href = "RentOnAdvDetails.php?number=<?php echo $row->id?>">more</a></td></tr>
 				</tbody>
 			</table>
@@ -89,12 +73,29 @@
 	 <?php
 	}
 	public function getAdv($id) {
-		$row = $this->getAdvData($id);
 	?>
 	<main>
+		<?php 
+		$row = $this->getAdvData($id);
+		$this->startAdvTable($row);
+	?>
+	
+						<tr class = "advTableCell"><td colspan="2"><p><?php echo $row->advertisementText?></p></td></tr>
+						<tr><td><a href = "RentOnMessage.php?number=<?php echo $row->id?>">Send a message</a></td></tr>
+				</tbody>
+			</table>
+			</div>
+			<br>
+	</main>
+	 <?php
+	}
+	
+	private function startAdvTable($row) {
+		?>
+		<div>
 			<table class = "advTable">
 				<tbody>
-					<tr class = "advTableCell"><td><h3><?php echo $row->title?></h3></td><td></td></tr>
+					<tr class = "advTableCell"><td  colspan="2"><h3><?php echo $row->title?></h3></td></tr>
 					<tr><td class = "advTableCell" id = "advImgCell"><img src = "appartmentspics\house.jpg"/></td>
 						<td class = "advTableCell"><ul class = "tableList">
 								<li class = "advTableListElement">
@@ -104,20 +105,13 @@
 									echo "Sell ";
 								} ?>
 								</li>
-								<li class = "advTableListElement">City: <?php echo $row->city?><li>
-								<li class = "advTableListElement">Size: <?php echo $row->size?> m2<li>
-								<li class = "advTableListElement">Heating System: <?php echo $row->heatingSystem?><li>
-								<li class = "advTableListElement"><h4>Prize: <?php echo $row->prize?> Ft</h4><li>
+								<li class = "advTableListElement"> City: <?php echo $row->city?><li>
+								<li class = "advTableListElement"> Size: <?php echo $row->size?> m2<li>
+								<li class = "advTableListElement"> Heating System: <?php echo $row->heatingSystem?><li>
+								<li><h4> Prize: <?php echo $row->prize?> Ft</h4><li>
 							</ul>
 						</td></tr>
-						<tr class = "advTableCell"><td ><p><?php echo $row->advertisementText?></p></td></tr>
-						<tr><td><a href = "RentOnMessage.php?number=<?php echo $row->id?>">Send a message</a></td></tr>
-				</tbody>
-			</table>
-			</div>
-			<br>
-	</main>
-	 <?php
+						<?php
 	}
 	
 	public function setSearchData($sql) {
