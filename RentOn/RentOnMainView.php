@@ -6,6 +6,7 @@
 	if(!empty($_SESSION['loginName'])) {
 		$userName = $_SESSION['loginName'];
 	}
+
 ?>
 <!DOCTYPE html>
 <html>

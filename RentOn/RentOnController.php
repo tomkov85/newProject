@@ -26,6 +26,12 @@
 		header("location: RentOnMyAdv.php");
 	}
 
+	public function setCookies($email, $pwd) {
+		$cookie_name = '$email';
+		$cookie_value = '$pwd';
+		setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); 
+	}
+	
 	public function registNewUser($name, $adress, $phone, $email, $pwd) {
 		$this->rmObj->getConnection()->query("INSERT INTO renton.users VALUES (null, '$name', '$adress',  '$email', '$phone', '$pwd')");
 	}
@@ -38,17 +44,70 @@
 		return $this->rmObj->getTableData("SELECT * FROM renton.advertisements WHERE advUser = $userId ORDER BY beginDate DESC");
 	}
 	
-	public function manageAdvertisements($id, $title, $type, $city, $size, $heatingType, $prize, $advText, $userId) {
+	public function manageAdvertisements($id, $title, $type, $city, $size, $heatingType, $prize, $advText, $userId, $fileData) {
+		$fileName = basename($fileData["name"]);
 		$type--;
 		if($id < 0) {
 			$id *= -1;
 			$this->rmObj->getConnection()->query("DELETE FROM renton.advertisements WHERE id = $id");
 		} else if ($id == 0) {
-			$this->rmObj->getConnection()->query("INSERT INTO renton.advertisements VALUE (null, '$title', null, '$city', null, $size, $prize, '$heatingType','$advText',$type,$userId,now())");
+			$this->rmObj->getConnection()->query("INSERT INTO renton.advertisements VALUE (null, '$title', 'fileName', null, '$city', null, $size, $prize, '$heatingType','$advText',$type,$userId,now())");
+			$this->checkUploadFile($fileData);
 		} else {
-			$this->rmObj->getConnection()->query("UPDATE renton.advertisements SET title = '$title', rentOrSell = '$type', city = '$city', size = $size, heatingType = '$heatingType', prize = $prize, advertisementText = '$advText' WHERE id = $id"); 
+			$this->rmObj->getConnection()->query("UPDATE renton.advertisements SET title = '$title', advImage = 'fileName', rentOrSell = '$type', city = '$city', size = $size, heatingType = '$heatingType', prize = $prize, advertisementText = '$advText' WHERE id = $id"); 		
+			$this->checkUploadFile($fileData);
 		}
 		header('location:RentOnMyAdv.php');
+	}
+	
+	public function checkUploadFile($fileData) {
+		$target_dir = "C:/xampp/htdocs/RentOn/appartmentspics/";
+		$target_file = $target_dir . basename($fileData["name"]);
+		$uploadOk = 1;
+		$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+		
+		$check = getimagesize($fileData["tmp_name"]);
+		if($check !== false) {
+			echo "File is an image - " . $check["mime"] . ".";
+			$uploadOk = 1;
+		} else {?>
+			<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> The file is not an image! </div></div>
+			<?php
+			$uploadOk = 0;
+		}
+		
+
+		if (file_exists($target_file)) {?>
+				<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> We already have a file with this name! </div></div>
+				<?php
+			$uploadOk = 0;
+		}
+
+		if ($fileData["size"] > 5000000) {?>
+				<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> The file is too large, the size is have to be under 5MB! </div></div>
+				<?php
+			$uploadOk = 0;
+		}
+
+		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+		&& $imageFileType != "gif" ) {?>
+				<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> Only JPG, JPEG, PNG & GIF files are allowed. </div></div>
+				<?php
+			$uploadOk = 0;
+		}
+
+		if ($uploadOk == 0) {?>
+				<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> Your file was not uploaded. </div></div>
+				<?php
+		} else {
+			if (move_uploaded_file($fileData["tmp_name"], $target_file)) {
+				echo "The file ". basename( $fileData["name"]). " has been uploaded.";
+			} else {?>
+				<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> There was an error uploading your file.</div></div>
+				<?php
+			}
+		}
 	}
 	
 	public function getAdvData($id) {
@@ -90,13 +149,13 @@
 	 <?php
 	}
 	
-	private function startAdvTable($row) {
+	public function startAdvTable($row) {
 		?>
 		<div>
 			<table class = "advTable">
 				<tbody>
 					<tr class = "advTableCell"><td  colspan="2"><h3><?php echo $row->title?></h3></td></tr>
-					<tr><td class = "advTableCell" id = "advImgCell"><img src = "appartmentspics\house.jpg"/></td>
+					<tr><td class = "advTableCell" id = "advImgCell"><img src = "<?php echo 'appartmentspics/'.$row->advImage ?>" id = "advImage"/></td>
 						<td class = "advTableCell"><ul class = "tableList">
 								<li class = "advTableListElement">
 								<?php if($row->rentOrSell) {

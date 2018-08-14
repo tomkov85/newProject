@@ -8,7 +8,7 @@
 	$view = $_GET["view"];
 	$mrOrw = true;
 		if($view == "incoming") {
-		$table = $controllerObj->getMessages("reciever = '$userName'");		
+			$table = $controllerObj->getMessages("reciever = '$userName'");		
 		} else if($view == "sent")  {
 			$table = $controllerObj->getMessages("sender = '$userName'");
 		} else {
@@ -16,10 +16,19 @@
 			$title = "";
 			$text = "";
 			if($view != "new") {
-			$row = $controllerObj->getMessage($view);
-			$adress = $row->sender;
-			$title = $row->messageTitle;
-			$text = $row->messageText;
+				$messageId = $_GET['messageId'];
+				$row = $controllerObj->getMessage($messageId);
+				$adress = $row->sender;
+				if($view == "reply") {
+					$title = "RE:".$row->messageTitle;
+					$text = "(original message: Date: $row->messageDate ".$row->messageText."´)";
+				} else if ($view == "foward") {
+					$title = "FWD:".$row->messageTitle;
+					$text = "(original message: Date: $row->messageDate ".$row->messageText."´)";
+				} else {
+					$title = $row->messageTitle;
+					$text = $row->messageText;
+				}
 			}
 		}
 	
@@ -39,7 +48,7 @@
 		    <thead><th>sender</th><th>reciever</th><th>title</th><th>Date</th></thead>
 			<tbody>
 				<?php foreach ($table as $row) {?>				
-					<tr onclick = "location.href = 'RentOnMessages.php?view=<?php  echo $row->id;?>'" <?php if($row->new) {echo "class = 'newMessageBG'";}?> ><td class = "advTable" id = "messageTableSendRecCell"><?php echo $row->sender ?></td><td class = "advTable" id = "messageTableSendRecCell"><?php echo $row->reciever ?></td><td class = "advTable" id = "messageTableTitleCell"><?php echo $row->messageTitle ?></td><td class = "advTable"><?php echo $row->messageDate ?></td></tr>
+					<tr onclick = "location.href = 'RentOnMessages.php?view=getOneMessage&messageId=<?php  echo $row->id;?>'" <?php if($row->new) {echo "class = 'newMessageBG'";}?> ><td class = "advTable" id = "messageTableSendRecCell"><?php echo $row->sender ?></td><td class = "advTable" id = "messageTableSendRecCell"><?php echo $row->reciever ?></td><td class = "advTable" id = "messageTableTitleCell"><?php echo $row->messageTitle ?></td><td class = "advTable"><?php echo $row->messageDate ?></td></tr>
 				<?php }?>
 			</tbody>
 		</table>
@@ -49,17 +58,17 @@
 		<form class = "form-horizontal" action = "RentOnMessages.php?view=sent" method = "POST" id = "messageForm">
 				<div class = "form-group">
 					<label>Adress:</label>
-					<input type = "email" class = "form-control" name = "newMessageAdress" value = '<?php echo $adress ?>' <?php if($view != "new"){echo  " readonly ";}?> />
+					<input type = "email" class = "form-control" name = "newMessageAdress" value = '<?php echo $adress ?>' <?php if($view == "getOneMessage"){echo  " readonly ";}?> />
 				</div>
 				<div class = "form-group">
 					<label>Title:</label>
-					<input type = "text" class = "form-control" name = "newMessageTitle" value = '<?php echo $title ?>' <?php if($view != "new"){echo  " readonly ";}?>/>	
+					<input type = "text" class = "form-control" name = "newMessageTitle" value = '<?php echo $title ?>' <?php if($view == "getOneMessage"){echo  " readonly ";}?>/>	
 				</div>					
 				<div class = "form-group">
 					<label>Text:</label>
-					<textarea name = "newMessageText" <?php if($view != "new"){echo  " readonly ";}?> id = "messageTextBox"><?php echo $text?></textarea>				
+					<textarea name = "newMessageText" <?php if($view== "getOneMessage"){echo  " readonly ";}?> id = "messageTextBox"><?php echo $text?></textarea>				
 				</div>
-				<?php if($view == "new") { 
+				<?php if($view != "getOneMessage") { 
 					$mrOrw = true;
 					?>
 					<button type = "submit" class = "btn btn-primary" name = "newMessageSubmit">Send</button>
@@ -67,10 +76,13 @@
 				<?php } else { 
 					$mrOrw = false;
 					?>
-					<button type = "submit" class = "btn btn-primary" name = "deleteMessageSubmit">Delete</button>  <button type = "submit" class = "btn btn-primary" name = "">Reply</button>  <button type = "submit" class = "btn btn-primary" name = "">Foward</button>
+					<button type = "submit" class = "btn btn-danger" name = "deleteMessageSubmit">Delete</button> 
 				<?php } ?>			
 		</form>
-	<?php } ?>
+		<?php if($view== "getOneMessage") { ?>
+		   <button class = "btn btn-primary" id = "replyMessageButton" onclick = "location.href = 'RentOnMessages.php?view=reply&messageId=<?php echo $messageId ?>'">Reply</button>  <button class = "btn btn-primary" name = "" onclick ="location.href = 'RentOnMessages.php?view=foward&messageId=<?php echo $messageId ?>'">Foward</button>
+		<?php }
+	} ?>
 	</div>
 </main>
 	<?php
@@ -86,8 +98,9 @@
 		}
 	}
 	} else if (isset($_POST['deleteMessageSubmit'])) {
+		$messageId = $_GET['messageId'];
 		unset($_POST['deleteMessageSubmit']);
-		$controllerObj->deleteMessage($view);
+		$controllerObj->deleteMessage($messageId);
 	}
 	
 	require_once 'RentOnFooterView.html';

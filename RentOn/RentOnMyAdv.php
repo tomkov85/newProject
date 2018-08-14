@@ -10,24 +10,9 @@
 		<?php 
 		foreach($table as $row) {
 			$deleteId = $row->id * -1;
-			?>
-			<div>
-			<table class = "advTable">
-				<tbody>
-					<tr class = "advTableCell"><td><h3><?php echo $row->title?></h3></td><td></td></tr>
-					<tr><td class = "advTableCell" id = "advImgCell"><img src = "appartmentspics\house.jpg"/></td>
-						<td class = "advTableCell"><ul class = "tableList">
-								<li class = "advTableListElement">
-								<?php if($row->rentOrSell) {
-									echo " Rent ";
-								} else {
-									echo "Sell ";
-								} ?>
-								</li>
-								<li class = "advTableListElement">City: <?php echo $row->city?><li>
-								<li class = "advTableListElement">Size: <?php echo $row->size?> m2<li>
-								<li class = "advTableListElement"><h4>Prize: <?php echo $row->prize?> Ft</h4><li>
-							</ul>
+			
+			$controllerObj->startAdvTable($row); ?>
+			
 						</td></tr>
 				</tbody>
 			</table>

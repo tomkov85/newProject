@@ -30,7 +30,7 @@
 	}
 	?>
 	<main>
-	<form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']?>" method = "POST">
+	<form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']?>" method = "POST" enctype="multipart/form-data">
 	<div class="form-group col-sm-8">
       <label class="control-label col-sm-2" for="title">Title:</label>
 	  <div class="col-sm-5">
@@ -75,9 +75,15 @@
 	  </div>
 	</div>
 	<div class="form-group col-sm-8">
-      <label class="control-label col-sm-2" for="pwd">Adveritsement Text:</label>
+      <label class="control-label col-sm-2" for="advText">Adveritsement Text:</label>
 	  <div class="col-sm-5">
       <textarea name = "advText" class="col-sm-12"> <?php echo $advText; ?></textarea>
+	  </div>
+    </div>
+	<div class="form-group col-sm-8">
+      <label class="control-label col-sm-2" for="imageUpload">Pictures:</label>
+	  <div class="col-sm-5">
+      <input type="file" class="form-control" name="imageUpload"/>
 	  </div>
     </div>
     <div class="form-group col-sm-8">
@@ -94,7 +100,7 @@
 				unset($_POST['submit']);				
 				$userEmail = $_SESSION['loginName'];
 				$userId = $controllerObj->getUserData($userEmail)->id;
-				$controllerObj->manageAdvertisements($id,$_POST['title'],$_POST['type'],$_POST['city'],$_POST['size'],$_POST['heatingSystem'],$_POST['prize'],$_POST['advText'],$userId);
+				$controllerObj->manageAdvertisements($id,$_POST['title'],$_POST['type'],$_POST['city'],$_POST['size'],$_POST['heatingSystem'],$_POST['prize'],$_POST['advText'],$userId, $_FILES["imageUpload"]);
 			} else {?>
 		<div class="col-sm-offset-1 col-sm-5 "><div class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> You doesnt fill all the fields! </div></div>
 		<?php
