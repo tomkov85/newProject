@@ -20,14 +20,14 @@
     </div>
     <div class="form-group col-sm-7">
 	<div class="col-sm-offset-2 col-sm-5">
-    <button type="submit" class="btn btn-primary" name = "submit">Submit</button>
+    <button type="submit" class="btn btn-primary" name = "loginSubmit">Submit</button>
 	</div>
 	</div>
 	</form>
 </main>
 
 <?php
-	if(isset($_POST['submit'])) {
+	if(isset($_POST['loginSubmit'])) {
 	if(!empty($_POST['email']) & !empty($_POST['pwd'])) {
 		$email = $_POST['email'];
 		$pwd = $_POST['pwd'];
@@ -36,12 +36,12 @@
 			$controllerObj->login($email);
 		} else {
 			?>
-			<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> Your email adress or password doesnt match! </div></div>
+			<div class="col-sm-5" id = "errorMessage" ><div  class = "alert alert-danger" id = "errorMessage"> <strong> Error!</strong> Your email adress or password doesnt match! </div></div>
 			<?php
 		}
 	} else {
 		?>
-		<div class="col-sm-offset-1 col-sm-5 "><div class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> You doesnt fill all the fields! </div></div>
+		<div class="col-sm-5 " id = "errorMessage" ><div class = "alert alert-danger" id = "errorMessage"> <strong> Error!</strong> You doesnt fill all the fields! </div></div>
 		<?php
 	}
 	}

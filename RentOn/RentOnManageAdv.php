@@ -8,14 +8,14 @@
 	$heatingSystem = "";
 	$prize = "";
 	$advText = "";
+	$id = 0;
+	if(!empty($_GET['id'])) {
 	$id = $_GET['id'];
-	
+	}
 	if($id < 0) {
-	  $controllerObj->manageAdvertisements($id, null, null, null, null, null, null, null, null, null);
+	  $controllerObj->manageAdvertisements($id, null, null, null, null, null, null, null, null, null, null);
 	} else if($id > 0) {
-		
-		$row = $controllerObj->getAdvData($id);
-		
+		$row = $controllerObj->getAdvData($id);	
 		$title = $row->title;
 		if($row->rentOrSell) {
 			$type = "rent";
@@ -30,7 +30,7 @@
 	}
 	?>
 	<main>
-	<form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']?>" method = "POST" enctype="multipart/form-data">
+	<form class="form-horizontal" action="" method = "POST" enctype="multipart/form-data">
 	<div class="form-group col-sm-8">
       <label class="control-label col-sm-2" for="title">Title:</label>
 	  <div class="col-sm-5">
@@ -54,7 +54,7 @@
 	</div>
 	<div class="form-group col-sm-8">
       <label class="control-label col-sm-2" for="size">Size:</label>
-	  <div class="col-sm-1">
+	  <div class="col-sm-2">
       <input type="text" class="form-control" name="size" value = "<?php echo $size; ?>" />
 	  </div>
 	</div>
@@ -88,21 +88,20 @@
     </div>
     <div class="form-group col-sm-8">
 	<div class="col-sm-offset-2 col-sm-5">
-    <button type="submit" class="btn btn-primary" name = "submit">Submit</button>
+    <button type="submit" class="btn btn-primary" name = "ManageAdvSubmit">Submit</button>
 	</div>
 	</div>
 	</form>
 	</main>
 	
 	<?php
-		if(isset($_POST['submit'])) {
-			if(!empty($_POST['title']) & !empty($_POST['type']) & !empty($_POST['city']) & !empty($_POST['size']) & !empty($_POST['prize']) & !empty($_POST['advText']) & !empty($_POST['heatingSystem'])) {
-				unset($_POST['submit']);				
+		if(isset($_POST['ManageAdvSubmit'])) {
+			if(!empty($_POST['title']) & !empty($_POST['city']) & !empty($_POST['size']) & !empty($_POST['prize']) & !empty($_POST['advText']) & !empty($_POST['heatingSystem'])) {			
 				$userEmail = $_SESSION['loginName'];
 				$userId = $controllerObj->getUserData($userEmail)->id;
 				$controllerObj->manageAdvertisements($id,$_POST['title'],$_POST['type'],$_POST['city'],$_POST['size'],$_POST['heatingSystem'],$_POST['prize'],$_POST['advText'],$userId, $_FILES["imageUpload"]);
 			} else {?>
-		<div class="col-sm-offset-1 col-sm-5 "><div class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> You doesnt fill all the fields! </div></div>
+		<div class="col-sm-5" id = "errorMessage"><div class = "alert alert-danger" id = "errorMessage"> <strong> Error!</strong> You doesnt fill all the fields! </div></div>
 		<?php
 			
 		} 

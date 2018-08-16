@@ -25,15 +25,20 @@
 		$_SESSION['loginName'] = $name;
 		header("location: RentOnMyAdv.php");
 	}
-
+	/*
 	public function setCookies($email, $pwd) {
 		$cookie_name = '$email';
 		$cookie_value = '$pwd';
 		setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); 
-	}
+	}*/
 	
 	public function registNewUser($name, $adress, $phone, $email, $pwd) {
 		$this->rmObj->getConnection()->query("INSERT INTO renton.users VALUES (null, '$name', '$adress',  '$email', '$phone', '$pwd')");
+		header('location:RentOnLogin.php');
+	}
+	
+	public function updateUser($name, $adress, $phone, $email, $pwd) {
+		$this->rmObj->getConnection()->query("UPDATE renton.users SET name='$name' adress='$adress' email= $email' phone='$phone' userPassword='$pwd' WHERE email='$email'");
 	}
 	
 	public function getUserData($accountEmail) {
@@ -45,44 +50,54 @@
 	}
 	
 	public function manageAdvertisements($id, $title, $type, $city, $size, $heatingType, $prize, $advText, $userId, $fileData) {
+		if($id < 0) {
+			$userId = $id * (-1);
+		}
+		if($fileData != null){
 		$fileName = basename($fileData["name"]);
+		} else {
+			$fileName = $this->getAdvData($userId)->advImage;
+		}
 		$type--;
 		if($id < 0) {
-			$id *= -1;
-			$this->rmObj->getConnection()->query("DELETE FROM renton.advertisements WHERE id = $id");
+			$filepath = "appartmentspics/".$fileName;
+			unlink($filepath);
+			$this->rmObj->getConnection()->query("DELETE FROM renton.advertisements WHERE id = $userId");
+			header('location:RentOnMyAdv.php');
 		} else if ($id == 0) {
-			$this->rmObj->getConnection()->query("INSERT INTO renton.advertisements VALUE (null, '$title', 'fileName', null, '$city', null, $size, $prize, '$heatingType','$advText',$type,$userId,now())");
-			$this->checkUploadFile($fileData);
+			$lastId = $this->rmObj->getSingleData("SELECT id FROM renton.advertisements ORDER BY id DESC LIMIT 1") + 1;
+			$allowed = $this->checkUploadFile($fileData, $lastId);
+			if($allowed) {
+			$fileName = basename($lastId.".".strtolower(pathinfo($fileData['name'],PATHINFO_EXTENSION)));
+			$this->rmObj->getConnection()->query("INSERT INTO renton.advertisements VALUE (null, '$title', '$fileName', null, '$city', null, $size, $prize, '$heatingType','$advText',$type,$userId,now())");
+				?>
+				<div class="col-sm-5" id = "errorMessage"><div  class = "alert alert-success" id = "errorMessage"> <strong> Success!</strong> You have a new advertisement! </div></div>
+				<?php
+			}
 		} else {
-			$this->rmObj->getConnection()->query("UPDATE renton.advertisements SET title = '$title', advImage = 'fileName', rentOrSell = '$type', city = '$city', size = $size, heatingType = '$heatingType', prize = $prize, advertisementText = '$advText' WHERE id = $id"); 		
-			$this->checkUploadFile($fileData);
+			$allowed = $this->checkUploadFile($fileData,$id);
+			if($allowed) {
+			$this->rmObj->getConnection()->query("UPDATE renton.advertisements SET title = '$title', advImage = '$fileName', rentOrSell = '$type', city = '$city', size = $size, heatingType = '$heatingType', prize = $prize, advertisementText = '$advText' WHERE id = $userId"); 		
+			}
 		}
-		header('location:RentOnMyAdv.php');
 	}
 	
-	public function checkUploadFile($fileData) {
+	public function checkUploadFile($fileData, $lastId ) {
 		$target_dir = "C:/xampp/htdocs/RentOn/appartmentspics/";
-		$target_file = $target_dir . basename($fileData["name"]);
+		$target_file = $target_dir . basename($lastId.".".strtolower(pathinfo($fileData['name'],PATHINFO_EXTENSION)));
 		$uploadOk = 1;
 		$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
 		
 		$check = getimagesize($fileData["tmp_name"]);
 		if($check !== false) {
-			echo "File is an image - " . $check["mime"] . ".";
+			//echo "File is an image - " . $check["mime"] . ".";
 			$uploadOk = 1;
 		} else {?>
 			<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> The file is not an image! </div></div>
 			<?php
 			$uploadOk = 0;
-		}
-		
-
-		if (file_exists($target_file)) {?>
-				<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> We already have a file with this name! </div></div>
-				<?php
-			$uploadOk = 0;
-		}
+		}	
 
 		if ($fileData["size"] > 5000000) {?>
 				<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> The file is too large, the size is have to be under 5MB! </div></div>
@@ -102,16 +117,18 @@
 				<?php
 		} else {
 			if (move_uploaded_file($fileData["tmp_name"], $target_file)) {
-				echo "The file ". basename( $fileData["name"]). " has been uploaded.";
+				//echo "The file ". basename($lastId.".".strtolower(pathinfo($fileData['name'],PATHINFO_EXTENSION))). " has been uploaded.";
 			} else {?>
 				<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> There was an error uploading your file.</div></div>
 				<?php
 			}
 		}
+		
+		return $uploadOk;
 	}
 	
 	public function getAdvData($id) {
-		return $this->rmObj->getRowData("SELECT * FROM renton.advertisements WHERE id = '$id'");
+		return $this->rmObj->getRowData("SELECT * FROM renton.advertisements WHERE id = $id");
 	} 
 	
 	public function getAdvs($table) {
@@ -131,24 +148,7 @@
 	</main>
 	 <?php
 	}
-	public function getAdv($id) {
-	?>
-	<main>
-		<?php 
-		$row = $this->getAdvData($id);
-		$this->startAdvTable($row);
-	?>
-	
-						<tr class = "advTableCell"><td colspan="2"><p><?php echo $row->advertisementText?></p></td></tr>
-						<tr><td><a href = "RentOnMessage.php?number=<?php echo $row->id?>">Send a message</a></td></tr>
-				</tbody>
-			</table>
-			</div>
-			<br>
-	</main>
-	 <?php
-	}
-	
+
 	public function startAdvTable($row) {
 		?>
 		<div>
@@ -215,8 +215,20 @@
 		return $this->rmObj->getSingleData($actualSql);
 	}
 	
-	public function deleteMessage($view) {
-		$this->rmObj->getConnection()->query("DELETE FROM renton.messages WHERE id = $view");
+	public function deleteMessage($id) {
+		$this->rmObj->getConnection()->query("DELETE FROM renton.messages WHERE id = '$id'");
+		header('location:RentOnMessages.php?view=sent');
+	}
+	
+	public function getAdvTitleForAdvMessage($id) {
+		$actualSql = "SELECT title FROM renton.advertisements WHERE id = '$id'";
+		return $this->rmObj->getSingleData($actualSql);
+	}
+	
+	public function getUserMailForAdvMessage($id) {
+		$userId = $this->rmObj->getSingleData("SELECT advUser FROM renton.advertisements WHERE id = '$id'");
+		$actualSql = "SELECT email FROM renton.users WHERE id = '$userId'";
+		return $this->rmObj->getSingleData($actualSql);
 	}
 	}
 ?>

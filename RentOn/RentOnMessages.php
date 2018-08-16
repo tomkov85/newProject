@@ -5,8 +5,10 @@
 	$newMessageCounter = $controllerObj->getMessageCounter("reciever = '$userName' and new = true");
 	$incomingMessageCounter = $controllerObj->getMessageCounter("reciever = '$userName'");
 	$sentMessageCounter = $controllerObj->getMessageCounter("sender = '$userName'");
-	$view = $_GET["view"];
 	$mrOrw = true;
+	
+	if(!empty($_GET["view"])) {
+		$view = $_GET["view"];
 		if($view == "incoming") {
 			$table = $controllerObj->getMessages("reciever = '$userName'");		
 		} else if($view == "sent")  {
@@ -15,7 +17,7 @@
 			$adress = "";
 			$title = "";
 			$text = "";
-			if($view != "new") {
+			if($view != "new" & $view != "forAdv") {
 				$messageId = $_GET['messageId'];
 				$row = $controllerObj->getMessage($messageId);
 				$adress = $row->sender;
@@ -29,9 +31,13 @@
 					$title = $row->messageTitle;
 					$text = $row->messageText;
 				}
+			} else if($view == "forAdv") {
+				$id = $_GET['id'];
+				$adress = $controllerObj->getUserMailForAdvMessage($id);;
+				$title = $controllerObj->getAdvTitleForAdvMessage($id);
 			}
 		}
-	
+	}
 ?>
 <main>
 <h2>Messages</h2>
@@ -55,7 +61,7 @@
 			
 	<?php } else {
 		?>
-		<form class = "form-horizontal" action = "RentOnMessages.php?view=sent" method = "POST" id = "messageForm">
+		<form class = "form-horizontal" action = "RentOnMessages.php?view=sent<?php if(!empty($_GET['messageId'])){echo "&messageId=".$messageId;}?>" method = "POST" id = "messageForm">
 				<div class = "form-group">
 					<label>Adress:</label>
 					<input type = "email" class = "form-control" name = "newMessageAdress" value = '<?php echo $adress ?>' <?php if($view == "getOneMessage"){echo  " readonly ";}?> />
@@ -86,19 +92,20 @@
 	</div>
 </main>
 	<?php
-	if($mrOrw) {
 	if(isset($_POST['newMessageSubmit'])) {
 		unset($_POST['newMessageSubmit']);
 		if(!empty($_POST["newMessageAdress"])) {
 			$controllerObj->setNewMessage($userName,$_POST["newMessageAdress"], $_POST["newMessageTitle"],$_POST["newMessageText"]);
 		} else {
 			?>
-			<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> You didnt give any email adress! </div></div>
+			<div class="col-sm-5" id = "errorMessage"><div  class = "alert alert-danger" id = "errorMessage"> <strong> Error!</strong> You didnt give any email adress! </div></div>
 		<?php
 		}
 	}
-	} else if (isset($_POST['deleteMessageSubmit'])) {
+	if(isset($_GET['messageId'])) {
 		$messageId = $_GET['messageId'];
+	}
+	if(isset($_POST['deleteMessageSubmit'])) {	
 		unset($_POST['deleteMessageSubmit']);
 		$controllerObj->deleteMessage($messageId);
 	}

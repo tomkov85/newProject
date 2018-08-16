@@ -69,9 +69,9 @@
 			</div>
 			<div class = "form-group" id = "size-form-group">
 			<label for = "size">Size</label>
-			<input class = "form-control" type = "number" name = "sizeMinSearch" placeholder = "min" id = "formSize"/>
+			<input class = "form-control" type = "number" name = "sizeMinSearch" placeholder = "min" id = "formSize1"/>
 			 m2 -
-			<input class = "form-control" type = "number" name = "sizeMaxSearch" placeholder = "max" id = "formSize"/> m2
+			<input class = "form-control" type = "number" name = "sizeMaxSearch" placeholder = "max" id = "formSize2"/> m2
 			</div>
 		</form>
 		</div>

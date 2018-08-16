@@ -7,7 +7,11 @@ main {
 	min-height:480px;
 }
 
-#formSize {
+#formSize1{
+	width:100px;
+}
+
+#formSize2{
 	width:100px;
 }
 
@@ -73,10 +77,12 @@ main {
 	float:left;
 }
 
-#loginMessage {
-	margin:20px;
-	float:left;
+#errorMessage {
+	position:absolute;
+	right:10%;
+	top:30%;
 }
+
 
 #searchField {
 	padding-top:8px;	

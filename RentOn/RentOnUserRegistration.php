@@ -54,7 +54,7 @@
     </div>
     <div class="form-group col-sm-8">
 	<div class="col-sm-offset-2 col-sm-5">
-    <button type="submit" class="btn btn-primary" name = "submit">Submit</button>
+    <button type="submit" class="btn btn-primary" name = "registSubmit">Submit</button>
 	</div>
 	</div>
 	</form>
@@ -62,7 +62,7 @@
 
 <?php
 
-	if(isset($_POST['submit'])){
+	if(isset($_POST['registSubmit'])){
 	if(!empty($_POST['name']) & !empty($_POST['address']) & !empty($_POST['email']) & !empty($_POST['pwd1']) & !empty($_POST['pwd2'])) {
 		$name = $_POST['name'];
 		$address = $_POST['address'];
@@ -77,21 +77,25 @@
 		}
 		
 		if ($pwd1 == $pwd2) {
-		if($controllerObj->checkPwd($email, $pwd1) != null) {
+		if($controllerObj->checkPwd($email, $pwd1) == null) {
 			$controllerObj->registNewUser($name, $address, $phone, $email, $pwd1);
 		} else {
+			if(!empty($_SESSION["loginName"])) {
+				$controllerObj->updateUser($name, $address, $phone, $email, $pwd1);
+			} else {
 			?>
-			<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> There is a registration for this email! </div></div>
+			<div class="col-sm-5" id = "errorMessage"><div  class = "alert alert-danger" id = "errorMessage"> <strong> Error!</strong> There is a registration for this email! </div></div>
 			<?php
+			}
 		}
 		} else {
 			?>
-			<div class="col-sm-offset-1 col-sm-5 "><div  class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> Your password doesnt match! </div></div>
+			<div class="col-sm-5" id = "errorMessage"><div  class = "alert alert-danger" id = "errorMessage"> <strong> Error!</strong> Your password doesnt match! </div></div>
 			<?php
 		}
 	} else {
 		?>
-		<div class="col-sm-offset-1 col-sm-5 "><div class = "alert alert-danger" id = "loginMessage"> <strong> Error!</strong> You doesnt fill all the fields! </div></div>
+		<div class="col-sm-4" id = "errorMessage"><div class = "alert alert-danger" id = "errorMessage"> <strong> Error!</strong> You doesnt fill all the fields! </div></div>
 		<?php
 	}
 	}
