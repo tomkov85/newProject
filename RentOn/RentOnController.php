@@ -22,9 +22,16 @@
 	}
 	
 	public function login($name) {
+		session_start();
 		$_SESSION['loginName'] = $name;
-		header("location: RentOnMyAdv.php");
+		header("location: RentOnHome.php");
 	}
+	
+	public function logoutUser() {
+		session_destroy();
+		header("Location: RentOnHome.php");
+	}
+	
 	/*
 	public function setCookies($email, $pwd) {
 		$cookie_name = '$email';
@@ -45,11 +52,11 @@
 		return $this->rmObj->getRowData("SELECT * FROM renton.users WHERE email = '$accountEmail'");
 	}
 	
-	public function getUserAdvs($userId) {
-		return $this->rmObj->getTableData("SELECT * FROM renton.advertisements WHERE advUser = $userId ORDER BY beginDate DESC");
+	public function getUserAdvs($userId, $Limit) {
+		return $this->rmObj->getTableData("SELECT * FROM renton.advertisements WHERE advUser = $userId ORDER BY beginDate DESC ".$Limit);
 	}
 	
-	public function manageAdvertisements($id, $title, $type, $city, $size, $heatingType, $prize, $advText, $userId, $fileData) {
+	public function manageAdvertisements($id, $title, $type, $city, $size, $heatingSystem, $prize, $advText, $userId, $fileData) {
 		if($id < 0) {
 			$userId = $id * (-1);
 		}
@@ -60,16 +67,16 @@
 		}
 		$type--;
 		if($id < 0) {
-			$filepath = "appartmentspics/".$fileName;
+			$filepath = "apartmentspics/".$fileName;
 			unlink($filepath);
 			$this->rmObj->getConnection()->query("DELETE FROM renton.advertisements WHERE id = $userId");
-			header('location:RentOnMyAdv.php');
+			header('location:RentOnHome.php');
 		} else if ($id == 0) {
 			$lastId = $this->rmObj->getSingleData("SELECT id FROM renton.advertisements ORDER BY id DESC LIMIT 1") + 1;
 			$allowed = $this->checkUploadFile($fileData, $lastId);
 			if($allowed) {
 			$fileName = basename($lastId.".".strtolower(pathinfo($fileData['name'],PATHINFO_EXTENSION)));
-			$this->rmObj->getConnection()->query("INSERT INTO renton.advertisements VALUE (null, '$title', '$fileName', null, '$city', null, $size, $prize, '$heatingType','$advText',$type,$userId,now())");
+			$this->rmObj->getConnection()->query("INSERT INTO renton.advertisements VALUE (null, '$title', '$fileName', null, '$city', null, $size, $prize, '$heatingSystem','$advText',$type,$userId,now())");
 				?>
 				<div class="col-sm-5" id = "errorMessage"><div  class = "alert alert-success" id = "errorMessage"> <strong> Success!</strong> You have a new advertisement! </div></div>
 				<?php
@@ -77,13 +84,18 @@
 		} else {
 			$allowed = $this->checkUploadFile($fileData,$id);
 			if($allowed) {
-			$this->rmObj->getConnection()->query("UPDATE renton.advertisements SET title = '$title', advImage = '$fileName', rentOrSell = '$type', city = '$city', size = $size, heatingType = '$heatingType', prize = $prize, advertisementText = '$advText' WHERE id = $userId"); 		
+				echo "UPDATE renton.advertisements SET title = '$title', rentOrSell = $type, city = '$city', size = $size, heatingSystem = '$heatingSystem', prize = $prize, advertisementText = '$advText' WHERE id = $id";
+			$this->rmObj->getConnection()->query("UPDATE renton.advertisements SET title = '$title', rentOrSell = $type, city = '$city', size = $size, heatingSystem = '$heatingSystem', prize = $prize, advertisementText = '$advText' WHERE id = $id"); 		
+				?>
+				<div class="col-sm-5" id = "errorMessage"><div  class = "alert alert-success" id = "errorMessage"> <strong> Success!</strong> Your advertisement was updated! </div></div>
+				<?php
+			
 			}
 		}
 	}
 	
 	public function checkUploadFile($fileData, $lastId ) {
-		$target_dir = "C:/xampp/htdocs/RentOn/appartmentspics/";
+		$target_dir = "C:/xampp/htdocs/RentOn/apartmentspics/";
 		$target_file = $target_dir . basename($lastId.".".strtolower(pathinfo($fileData['name'],PATHINFO_EXTENSION)));
 		$uploadOk = 1;
 		$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
@@ -155,7 +167,7 @@
 			<table class = "advTable">
 				<tbody>
 					<tr class = "advTableCell"><td  colspan="2"><h3><?php echo $row->title?></h3></td></tr>
-					<tr><td class = "advTableCell" id = "advImgCell"><img src = "<?php echo 'appartmentspics/'.$row->advImage ?>" id = "advImage"/></td>
+					<tr><td class = "advTableCell" id = "advImgCell"><img src = "<?php echo 'apartmentspics/'.$row->advImage ?>" id = "advImage"/></td>
 						<td class = "advTableCell"><ul class = "tableList">
 								<li class = "advTableListElement">
 								<?php if($row->rentOrSell) {
@@ -230,5 +242,33 @@
 		$actualSql = "SELECT email FROM renton.users WHERE id = '$userId'";
 		return $this->rmObj->getSingleData($actualSql);
 	}
+	
+	public function getLimit($tableAll, $pagemax, $page) {
+		if($tableAll < $pagemax) {
+			$limitQuery = " LIMIT 0, $tableAll";
+		} else {
+			if($page == null) {
+				$limitQuery = " LIMIT 0, $pagemax";
+			} else {
+				$recordMin = ($page - 1) * $pageMax;
+				$recordMax = $page * $pageMax;
+				$limitQuery = " LIMIT $recordMin, $recordMax";
+			}
+		}
+		return $limitQuery;
 	}
+	
+	public function getPageLinks($recordCounter, $pagemax) {
+		if($recordCounter > $pagemax) {
+				$pager = ($recordCounter - $recordCounter % $pagemax) / $pagemax;
+				?>
+					<ul class="pagination" id = "searchPagination">
+					<?php for($i = 1; $i <= $pager; $i++) {?>
+					<li><a href="<?php echo $_SERVER['REQUEST_URI'].'?page='.$i?>"><?php echo $i ?></a></li>
+					<?php } ?>
+				</ul>
+				<?php
+			}
+	}
+}
 ?>

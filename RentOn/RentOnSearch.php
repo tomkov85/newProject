@@ -4,8 +4,14 @@
 	$sql = "SELECT * FROM renton.advertisements ";
 	
 	if(empty($order) & empty($pagemax)) {
-	$pagemax = "";
+	$pagemax = 50;
 	$order = "";
+	}
+	
+	if(empty($_GET['page'])) {
+		$page = null;
+	} else {
+		$page = $_GET['page'];
 	}
 	
 	if(!empty($_GET['searchField'])) {
@@ -17,11 +23,11 @@
 		if(!empty($_GET['searchField'])) {
 			$sql = $sql." AND ";
 		} else {
-			$sql."WHERE ";
+			$sql = $sql."WHERE ";
 		}
 		$sql = $controllerObj->setDetailedSearchQuery($_GET['prizeMinSearch'], $_GET['prizeMaxSearch'],$_GET['sizeMinSearch'],$_GET['sizeMaxSearch'],$sql);		
 	}
-	$tableAll = $controllerObj->setSearchData($sql);
+	$tableAll = count($controllerObj->setSearchData($sql));
 	$sql = $sql." ORDER BY ";
 	
 	if(!empty($_GET['order'])){
@@ -31,21 +37,9 @@
 		$order = "beginDate";	
 		}
 	}
-
 	$sql = $sql.$order;
-	if(empty($_GET['pagemax'])){
-		$pagemax = 50;
-	} else {
-		$pagemax = $_GET['pagemax'];
-	}
-	
-	if(empty($_GET['page'])){
-		$pageFirstRecord = 0;
-	} else {
-		$page = $_GET['page'];
-		$pageFirstRecord = ($page - 1)*$pagemax;
-	}
-	$sql = $sql." LIMIT $pageFirstRecord, $pagemax";
+
+	$sql = $sql.$controllerObj->getLimit($tableAll, $pagemax, $page);
 
 	?>
 		<form class="form-inline" action="<?php echo $_SERVER['REQUEST_URI']?>" method = "GET" id = "advListSettingsMenu">
@@ -64,16 +58,7 @@
 	$table = $controllerObj->setSearchData($sql);;
 	$controllerObj->getAdvs($table);
 
-	if(count($tableAll) > $pagemax) {
-				$pager = ((count($tableAll) - count($tableAll) % $pagemax) / $pagemax);
-				?>
-					<ul class="pagination" id = "searchPagination">
-					<?php for($i = 1; $i <= $pager; $i++) {?>
-					<li><a href="<?php echo $_SERVER['REQUEST_URI'].'&page='.$i?>"><?php echo $i ?></a></li>
-					<?php } ?>
-				</ul>
-				<?php
-			}
+	$controllerObj->getPageLinks($tableAll ,$pageMax);
 	
 	require_once 'RentOnFooterView.html';
 ?>

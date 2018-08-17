@@ -15,7 +15,7 @@
 							?>		
 							<tr><td><a href = "RentOnMessages.php?view=forAdv&id=<?php echo $row->id?>">Send a message</a></td></tr>
 						<?php }else{ ?>
-							<tr><td colspan="2"><a>to send a message, please <strong><a href="RentOnLogin.php"> login</a></strong><a> or </a><strong><a href="RentOnUserRegistration.php?accountEmail=null"> sign up</a></strong></a></td></tr>
+							<tr><td colspan="2"><a>to send a message, please <strong><a href="RentOnLoginLogout.php"> login</a></strong><a> or </a><strong><a href="RentOnAccountManager.php"> sign up</a></strong></a></td></tr>
 							<?php } ?>
 				</tbody>
 			</table>

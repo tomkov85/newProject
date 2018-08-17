@@ -28,8 +28,7 @@
 		</div>
 		
 		<div class="form-group" id = "searchField">
-			<input type="search" name = "searchField" class="form-control" size = "30" placeholder="Where do you search an apartment?">
-			<button class="btn btn-primary" type="submit"><img src = "icons/glyphicons-28-search.png"> Search</button>
+			<input type="search" name = "searchField" class="form-control" size = "30" placeholder="Where do you search an apartment?"><button class="btn btn-primary" type="submit" id = "mainSearchButton"><img src = "icons/glyphicons-28-search.png"></button>
 			<a data-toggle = "collapse" data-target = "#search">more options</a>
 		</div>						 
 		<ul class="nav navbar-nav navbar-right">
@@ -42,18 +41,18 @@
 						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style = "margin:7px;"><?php echo $userName ?>
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu">
-							<li><a href = "RentOnMyAdv.php">My Advertisements</a></li>
+							<li><a href = "RentOnHome.php">My Advertisements</a></li>
 							<li><a href = "RentOnMessages.php?view=incoming">Messages <img src = "icons/glyphicons-130-message-new.png"><span class = "signedData"><b><?php echo $newMessageCounter?></b></span></a></li>
-							<li><a href = "RentOnUserRegistration.php">Data modification</a></li>
-							<li><a href = "RentOnExit.php">Logout</a></li>
+							<li><a href = "RentOnAccountManager.php">Data modification</a></li>
+							<li><a href = "RentOnLoginLogout.php">Logout</a></li>
 						</ul>
 					</div>
 					</li>
 					<?php
 				} else {
 			?>
-			<li><a href="RentOnUserRegistration.php?accountEmail=null"><img src = "icons/glyphicons-400-registration-mark.png"> Sign Up</a></li>
-			<li><a href="RentOnLogin.php"><img src = "icons/glyphicons-387-log-in.png"> Login</a></li>
+			<li><a href="RentOnAccountManager.php"><img src = "icons/glyphicons-400-registration-mark.png"> Sign Up</a></li>
+			<li><a href="RentOnLoginLogout.php"><img src = "icons/glyphicons-387-log-in.png"> Login</a></li>
 			<?php
 				}
 			?>
@@ -65,7 +64,7 @@
 			<label for = "prize">Prize</label>
 			<input class = "form-control" type = "number" name = "prizeMinSearch" placeholder = "min"/>
 			 Ft -
-			<input class = "form-control" type = "number" name = "prizeMaxSearch" placeholder = "max"/> Ft  
+			<input class = "form-control" type = "number" name = "prizeMaxSearch" placeholder = "max" /> Ft  
 			</div>
 			<div class = "form-group" id = "size-form-group">
 			<label for = "size">Size</label>

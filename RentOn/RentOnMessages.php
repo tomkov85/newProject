@@ -5,14 +5,25 @@
 	$newMessageCounter = $controllerObj->getMessageCounter("reciever = '$userName' and new = true");
 	$incomingMessageCounter = $controllerObj->getMessageCounter("reciever = '$userName'");
 	$sentMessageCounter = $controllerObj->getMessageCounter("sender = '$userName'");
+	$tableAll = 0;
+	if(empty($_GET['page'])) {
+		$page = null;
+	} else {
+		$page = $_GET['page'];
+	}
 	$mrOrw = true;
 	
 	if(!empty($_GET["view"])) {
 		$view = $_GET["view"];
 		if($view == "incoming") {
-			$table = $controllerObj->getMessages("reciever = '$userName'");		
+			$tableAll = $incomingMessageCounter;
+			$limitQuery = $controllerObj->getLimit($tableAll, 20, $page);
+			$table = $controllerObj->getMessages("reciever = '$userName' ".$limitQuery);			
 		} else if($view == "sent")  {
-			$table = $controllerObj->getMessages("sender = '$userName'");
+			$tableAll = $sentMessageCounter;
+			$limitQuery = $controllerObj->getLimit($tableAll, 20, $page);
+			$table = $controllerObj->getMessages("sender = '$userName' ".$limitQuery);	
+			}		
 		} else {
 			$adress = "";
 			$title = "";
@@ -25,8 +36,9 @@
 					$title = "RE:".$row->messageTitle;
 					$text = "(original message: Date: $row->messageDate ".$row->messageText."´)";
 				} else if ($view == "foward") {
+					$adress = "";
 					$title = "FWD:".$row->messageTitle;
-					$text = "(original message: Date: $row->messageDate ".$row->messageText."´)";
+					$text = "(original message: Date: $row->messageDate , email adress: $row->sender, $row->messageText)";
 				} else {
 					$title = $row->messageTitle;
 					$text = $row->messageText;
@@ -37,7 +49,7 @@
 				$title = $controllerObj->getAdvTitleForAdvMessage($id);
 			}
 		}
-	}
+	
 ?>
 <main>
 <h2>Messages</h2>
@@ -64,11 +76,11 @@
 		<form class = "form-horizontal" action = "RentOnMessages.php?view=sent<?php if(!empty($_GET['messageId'])){echo "&messageId=".$messageId;}?>" method = "POST" id = "messageForm">
 				<div class = "form-group">
 					<label>Adress:</label>
-					<input type = "email" class = "form-control" name = "newMessageAdress" value = '<?php echo $adress ?>' <?php if($view == "getOneMessage"){echo  " readonly ";}?> />
+					<input type = "email" class = "form-control" name = "newMessageAdress" value = '<?php echo $adress ?>' <?php if($view == "getOneMessage"){echo  " readonly ";}?> required />
 				</div>
 				<div class = "form-group">
 					<label>Title:</label>
-					<input type = "text" class = "form-control" name = "newMessageTitle" value = '<?php echo $title ?>' <?php if($view == "getOneMessage"){echo  " readonly ";}?>/>	
+					<input type = "text" class = "form-control" name = "newMessageTitle" value = '<?php echo $title ?>' <?php if($view == "getOneMessage"){echo  " readonly ";}?> pattern = "[^()<>]{3,40}" required />	
 				</div>					
 				<div class = "form-group">
 					<label>Text:</label>
@@ -82,25 +94,19 @@
 				<?php } else { 
 					$mrOrw = false;
 					?>
-					<button type = "submit" class = "btn btn-danger" name = "deleteMessageSubmit">Delete</button> 
+					<button type = "submit" class = "btn btn-danger" name = "deleteMessageSubmit">Delete</button>
+					<?php if($view== "getOneMessage") { ?>
+					<a class = "btn btn-primary" href = "RentOnMessages.php?view=reply&messageId=<?php echo $messageId ?>">Reply</a>  <a class = "btn btn-primary" name = "" href = "RentOnMessages.php?view=foward&messageId=<?php echo $messageId ?>">Foward</a>	
 				<?php } ?>			
 		</form>
-		<?php if($view== "getOneMessage") { ?>
-		   <button class = "btn btn-primary" id = "replyMessageButton" onclick = "location.href = 'RentOnMessages.php?view=reply&messageId=<?php echo $messageId ?>'">Reply</button>  <button class = "btn btn-primary" name = "" onclick ="location.href = 'RentOnMessages.php?view=foward&messageId=<?php echo $messageId ?>'">Foward</button>
 		<?php }
 	} ?>
 	</div>
+	
 </main>
 	<?php
 	if(isset($_POST['newMessageSubmit'])) {
-		unset($_POST['newMessageSubmit']);
-		if(!empty($_POST["newMessageAdress"])) {
 			$controllerObj->setNewMessage($userName,$_POST["newMessageAdress"], $_POST["newMessageTitle"],$_POST["newMessageText"]);
-		} else {
-			?>
-			<div class="col-sm-5" id = "errorMessage"><div  class = "alert alert-danger" id = "errorMessage"> <strong> Error!</strong> You didnt give any email adress! </div></div>
-		<?php
-		}
 	}
 	if(isset($_GET['messageId'])) {
 		$messageId = $_GET['messageId'];
@@ -109,6 +115,6 @@
 		unset($_POST['deleteMessageSubmit']);
 		$controllerObj->deleteMessage($messageId);
 	}
-	
+	$controllerObj->getPageLinks($tableAll ,20);
 	require_once 'RentOnFooterView.html';
 	?>

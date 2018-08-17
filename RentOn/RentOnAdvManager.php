@@ -34,7 +34,7 @@
 	<div class="form-group col-sm-8">
       <label class="control-label col-sm-2" for="title">Title:</label>
 	  <div class="col-sm-5">
-      <input type="text" class="form-control" name="title"  value = "<?php echo $title; ?>" />
+      <input type="text" class="form-control" name="title"  value = "<?php echo $title; ?>" pattern = "[A-Z][^()<>]{3,40}" required />
 	  </div>
 	</div>
 	<div class="form-group col-sm-8">
@@ -49,13 +49,13 @@
     <div class="form-group col-sm-8">
       <label class="control-label col-sm-2" for="city">City:</label>
 	  <div class="col-sm-5">
-      <input type="text" class="form-control" name="city" value = "<?php echo $city; ?>" />
+      <input type="text" class="form-control" name="city" value = "<?php echo $city; ?>" pattern = "[A-Z][^()<>]{3,40}" required />
 	  </div>
 	</div>
 	<div class="form-group col-sm-8">
       <label class="control-label col-sm-2" for="size">Size:</label>
 	  <div class="col-sm-2">
-      <input type="text" class="form-control" name="size" value = "<?php echo $size; ?>" />
+      <input type="number" class="form-control" name="size" value = "<?php echo $size; ?>" required />
 	  </div>
 	</div>
 	<div class="form-group col-sm-8">
@@ -70,8 +70,8 @@
 	</div>
 	<div class="form-group col-sm-8">
       <label class="control-label col-sm-2" for="prize">Prize:</label>
-	  <div class="col-sm-5">
-      <input type="text" class="form-control" name="prize" value = "<?php echo $prize; ?>"/>
+	  <div class="col-sm-3">
+      <input type="number" class="form-control" name="prize" value = "<?php echo $prize; ?>" required />
 	  </div>
 	</div>
 	<div class="form-group col-sm-8">
@@ -83,7 +83,7 @@
 	<div class="form-group col-sm-8">
       <label class="control-label col-sm-2" for="imageUpload">Pictures:</label>
 	  <div class="col-sm-5">
-      <input type="file" class="form-control" name="imageUpload"/>
+      <input type="file" class="form-control" name="imageUpload" required />
 	  </div>
     </div>
     <div class="form-group col-sm-8">
@@ -95,16 +95,10 @@
 	</main>
 	
 	<?php
-		if(isset($_POST['ManageAdvSubmit'])) {
-			if(!empty($_POST['title']) & !empty($_POST['city']) & !empty($_POST['size']) & !empty($_POST['prize']) & !empty($_POST['advText']) & !empty($_POST['heatingSystem'])) {			
+		if(isset($_POST['ManageAdvSubmit'])) {	
 				$userEmail = $_SESSION['loginName'];
 				$userId = $controllerObj->getUserData($userEmail)->id;
 				$controllerObj->manageAdvertisements($id,$_POST['title'],$_POST['type'],$_POST['city'],$_POST['size'],$_POST['heatingSystem'],$_POST['prize'],$_POST['advText'],$userId, $_FILES["imageUpload"]);
-			} else {?>
-		<div class="col-sm-5" id = "errorMessage"><div class = "alert alert-danger" id = "errorMessage"> <strong> Error!</strong> You doesnt fill all the fields! </div></div>
-		<?php
-			
-		} 
 	}
 	require_once 'RentOnFooterView.html';
 ?>
